@@ -30,47 +30,13 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO return filtered list with excess. Implement by cycles
-        List<UserMealWithExcess> userMealWithExcesses = new ArrayList<>();
-        int calories = 0;
-        for (int i = 0; i < meals.size(); i++) {
-            UserMeal meal = meals.get(i);
-            boolean excess = (calories += meal.getCalories()) > caloriesPerDay;
-            if ((i + 1 < meals.size())) {
-                if (getDayOfMonth(meal) != getDayOfMonth(meals.get(i + 1))) {
-                    calories = 0;
-                }
-            }
-            if (mealFilterConditions(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                userMealWithExcesses.add(new UserMealWithExcess(meal.getDateTime(),
-                        meal.getDescription(), meal.getCalories(), excess));
-            }
-        }
-        return userMealWithExcesses;
+        return new ArrayList<>();
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO Implement by streams
-        final int[] data = {0, 0};
-        return meals.stream().map(meal -> {
-            if (data[0] != getDayOfMonth(meal)) data[1] = 0;
-            data[0] = getDayOfMonth(meal);
-            boolean excess = (data[1] += meal.getCalories()) > caloriesPerDay;
-            return new UserMealWithExcess(meal.getDateTime(), meal.getDescription(),
-                    meal.getCalories(), excess);
-        }).filter(meal -> mealFilterConditions(meal.getDateTime().
-                toLocalTime(), startTime, endTime)).collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
-
-    private static boolean mealFilterConditions(LocalTime mealTime, LocalTime startTime, LocalTime endTime) {
-        return (mealTime.isAfter(startTime) || mealTime.equals(startTime))
-                && (mealTime.isBefore(endTime) || mealTime.equals(endTime));
-    }
-
-    private static int getDayOfMonth(UserMeal meal){
-        return meal.getDateTime().toLocalDate().getDayOfMonth();
-    }
 
 
 }
