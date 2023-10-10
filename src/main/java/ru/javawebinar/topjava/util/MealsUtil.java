@@ -9,10 +9,10 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MealsUtil {
     public static final int CALORIES_PER_DAY = 2000;
+
     public static void main(String[] args) {
         List<Meal> mealsTo = Arrays.asList(
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
@@ -37,31 +37,13 @@ public class MealsUtil {
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
-    }
+        }
 
     private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+        return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
-
-
-    public static List<MealTo> refreshMealsTo(Collection<MealTo> mealsTo) {
-        Map<LocalDate, Integer> sumCaloriesByDates = new HashMap<>();
-        mealsTo.forEach(meal -> {
-            sumCaloriesByDates.merge(meal.getDateTime().toLocalDate(),
-                    meal.getCalories(), Integer::sum);
-        });
-        return mealsTo.stream()
-                .map(meal -> {
-                    int sumCalories = sumCaloriesByDates.get(meal.getDateTime().toLocalDate());
-                    return new MealTo(meal.getDateTime(), meal.getDescription(),
-                            meal.getCalories(), sumCalories > CALORIES_PER_DAY, meal.getId());
-                }).collect(Collectors.toList());
-    }
-
-
-
-
-
-
 
 }
+
+
+
