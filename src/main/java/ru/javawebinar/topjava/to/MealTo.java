@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.model;
+package ru.javawebinar.topjava.to;
 
 import java.time.LocalDateTime;
 
@@ -52,7 +52,4 @@ public class MealTo {
                 '}';
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
 }

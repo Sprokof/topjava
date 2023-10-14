@@ -14,5 +14,14 @@ public class DateTimeUtil {
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
     }
+
+    public static int compareDates(LocalDateTime currentDate, LocalDateTime next) {
+        int result = currentDate.toLocalDate().compareTo(next.toLocalDate());
+        result = ((- 1) * result);
+        if (0 == result) {
+            result = currentDate.toLocalTime().compareTo(next.toLocalTime());
+        }
+        return result;
+    }
 }
 
