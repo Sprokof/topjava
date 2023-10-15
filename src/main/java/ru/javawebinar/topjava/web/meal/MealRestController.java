@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public class MealRestController extends AbstractMealController {
 
     @Override
-    public List<Meal> getAll() {
+    public List<MealTo> getAll() {
         return super.getAll();
     }
 

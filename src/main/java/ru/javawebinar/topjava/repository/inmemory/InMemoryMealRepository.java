@@ -51,9 +51,8 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Collection<Meal> getAll() {
-        return repository.values().
-                stream().flatMap(map -> map.values().stream())
-                .sorted((m1, m2) -> DateTimeUtil.compareDates(m1.getDateTime(), m2.getDateTime()))
+        return repository.values().stream()
+                .flatMap(map -> map.values().stream())
                 .collect(Collectors.toList());
     }
 
