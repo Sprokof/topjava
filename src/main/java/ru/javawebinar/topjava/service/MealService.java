@@ -5,12 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
@@ -33,25 +31,18 @@ public class MealService {
         return checkNotFoundWithId(repository.get(userId, id), id);
     }
 
-    public List<MealTo> getAll() {
-        List<Meal> meals = repository.getAll().stream()
-                .sorted((m1, m2) -> DateTimeUtil.compareDates(m1.getDateTime(), m2.getDateTime()))
-                .collect(Collectors.toList());
-        return MealsUtil.getTos(meals, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    public List<MealTo> getAll(int userId, int caloriesPerDay) {
+        List<Meal> meals = repository.getAll(userId);
+        return MealsUtil.getTos(meals, caloriesPerDay);
     }
 
-    public void createOrUpdate(int userId, Meal meal){
-        checkNotFoundWithId(repository.save(userId, meal), meal.getId());
-    }
 
     public Meal create(int userId, Meal meal){
-        checkNotFoundWithId(repository.save(userId, meal), meal.getId());
+        repository.save(userId, meal);
         return meal;
-
     }
 
     public void update(int userId, Meal meal){
         checkNotFoundWithId(repository.save(userId, meal), meal.getId());
     }
-
 }

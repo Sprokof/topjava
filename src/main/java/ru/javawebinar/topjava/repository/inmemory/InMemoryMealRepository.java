@@ -3,14 +3,13 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
-import java.util.Collection;
-import java.util.Map;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
@@ -18,49 +17,35 @@ public class InMemoryMealRepository implements MealRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> save(meal.getUserId(), meal));
+        MealsUtil.meals.forEach(meal -> save(SecurityUtil.authUserId(), meal));
 
     }
 
     @Override
-    public Meal save(int userId, Meal meal) {
+    public Meal save(Integer userId, Meal meal) {
         if (meal.isNew()) {
-            meal.setId(counter.incrementAndGet());
-            addAuthUserMeal(userId, meal);
-            return meal;
+            meal.setId(counter.incrementAndGet());;
+            return repository.computeIfAbsent(userId, id -> new ConcurrentHashMap<>()).put(meal.getId(), meal);
+
         }
-        if(!repository.containsKey(userId)) return null;
         return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(int userId, int id) {
-        if(repository.containsKey(userId)) {
-            return repository.get(userId).remove(id) != null;
-        }
-        return false;
+        return repository.getOrDefault(userId, new ConcurrentHashMap<>()).remove(id) != null;
     }
 
     @Override
     public Meal get(int userId, int id) {
-        if(!repository.containsKey(userId)){
-            return null;
-        }
-        return repository.get(userId).get(id);
+        return repository.getOrDefault(userId, new ConcurrentHashMap<>()).get(id);
     }
 
     @Override
-    public Collection<Meal> getAll() {
-        return repository.values().stream()
-                .flatMap(map -> map.values().stream())
-                .collect(Collectors.toList());
-    }
-
-    private void addAuthUserMeal(int userId, Meal meal){
-        if(!repository.containsKey(userId)){
-            repository.put(userId, new ConcurrentHashMap<>());
-        }
-        repository.get(userId).put(meal.getId(), meal);
+    public List<Meal> getAll(int userId) {
+        List<Meal> userMeals = new ArrayList<>(repository.get(userId).values());
+        Collections.reverse(userMeals);
+        return userMeals;
     }
 
 }

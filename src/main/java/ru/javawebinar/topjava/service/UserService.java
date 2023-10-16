@@ -37,9 +37,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return repository.getAll().stream()
-                .sorted(Comparator.comparingInt(u -> u.getName().length()))
-                .collect(Collectors.toList());
+        return repository.getAll();
     }
 
     public void update(User user) {

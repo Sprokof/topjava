@@ -1,36 +1,53 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
-public class MealRestController extends AbstractMealController {
+public class MealRestController {
 
-    @Override
+    @Autowired
+    private MealService mealService;
+
+    @Autowired
+    private UserService userService;
+
     public List<MealTo> getAll() {
-        return super.getAll();
+        User user = userService.get(SecurityUtil.authUserId());
+        return mealService.getAll(user.getId(), user.getCaloriesPerDay());
     }
 
-    @Override
-    public Meal get(int userId, int id) {
-        return super.get(userId, id);
+    public List<MealTo> getFilteredAll(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
+        return getAll().stream()
+                .filter(meal -> DateTimeUtil.isBetweenDates(meal.getDateTime().toLocalDate(), startDate, endDate))
+                .filter(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public Meal create(int userId, Meal meal) {
-        return super.create(userId, meal);
+    public Meal get(int id) {
+        return mealService.get(SecurityUtil.authUserId(), id);
+    }
+    public Meal create(Meal meal) {
+        return mealService.create(SecurityUtil.authUserId(), meal);
     }
 
-    @Override
-    public void delete(int userId, int id) {
-        super.delete(userId, id);
+    public void delete(int id) {
+        mealService.delete(SecurityUtil.authUserId(), id);
     }
 
-    @Override
-    public void update(int userId, Meal meal, int id) {
-        super.update(userId, meal, id);
+    public void update(Meal meal) {
+        mealService.update(SecurityUtil.authUserId(), meal);
     }
 }
