@@ -13,7 +13,7 @@ public class DateTimeUtil {
     }
 
     public static boolean isBetweenDates(LocalDate dt, LocalDate startDate, LocalDate endDate){
-        return dt.compareTo(startDate) >= 0 && dt.compareTo(endDate) < 0;
+        return (dt.isAfter(startDate) || dt.equals(startDate)) && (dt.isBefore(endDate) || dt.equals(endDate));
     }
 
     public static String toString(LocalDateTime ldt) {

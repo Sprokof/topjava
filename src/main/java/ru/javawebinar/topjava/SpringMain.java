@@ -2,12 +2,16 @@ package ru.javawebinar.topjava;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 public class SpringMain {
@@ -18,7 +22,10 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
-            System.out.println(mealRestController.get(1));
+            mealRestController.create(new Meal(LocalDateTime.of(2023, 10, 18, 10, 45), "завтрак", 300));
+            System.out.println(mealRestController.getAll());
+            System.out.println(mealRestController.getFilteredAll(LocalDate.of(2023, 10, 18),
+                    LocalDate.of(2023, 10, 18), LocalTime.of(0, 0), LocalTime.of(23, 59)));
         }
     }
 }
