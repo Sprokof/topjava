@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -47,7 +48,7 @@ public class MealServiceTest {
     @Test
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
-                service.create(new Meal(DATE_TIME, "Duplicate", 300), USER_ID));
+                service.create(new Meal(meal3.getDateTime(), "Duplicate", 300), USER_ID));
     }
 
     @Test
@@ -57,8 +58,8 @@ public class MealServiceTest {
     }
 
     @Test
-    public void deleteForeign(){
-        assertThrows(NotFoundException.class, () ->  service.delete(FOREIGN_MEAL_ID, USER_ID));
+    public void deleteForeign() {
+        assertThrows(NotFoundException.class, () -> service.delete(FOREIGN_MEAL_ID, USER_ID));
     }
 
     @Test
@@ -73,7 +74,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getForeign(){
+    public void getForeign() {
         assertThrows(NotFoundException.class, () -> service.get(FOREIGN_MEAL_ID, USER_ID));
     }
 
@@ -90,20 +91,25 @@ public class MealServiceTest {
     }
 
     @Test
-    public void updateForeign(){
-        assertThrows(NotFoundException.class, () -> service.get(FOREIGN_USER_ID, FOREIGN_MEAL_ID));
+    public void updateForeign() {
+        assertThrows(NotFoundException.class, () -> service.get(FOREIGN_MEAL_ID, USER_ID));
     }
 
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(USER_ID);
-        assertMatch(all, meal3, meal2, meal1);
+        assertMatch(all, meal6, meal5, meal4, meal3, meal2, meal1);
+    }
+
+    @Test
+    public void getBetweenInclusiveWithEmptyBorders() {
+        List<Meal> meals = service.getBetweenInclusive(null, null, USER_ID);
+        assertMatch(meals, meal6, meal5, meal4, meal3, meal2, meal1);
     }
 
     @Test
     public void getBetweenInclusive(){
-        List<Meal> meals = service.getBetweenInclusive(START_DATE_TIME.toLocalDate(),
-                END_DATE_TIME.toLocalDate(), USER_ID);
+        List<Meal> meals = service.getBetweenInclusive(START_DATE_TIME.toLocalDate(), END_DATE_TIME.toLocalDate(), USER_ID);
         assertMatch(meals, meal3, meal2, meal1);
     }
 
