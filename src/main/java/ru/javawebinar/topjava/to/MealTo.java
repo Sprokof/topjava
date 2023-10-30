@@ -52,7 +52,4 @@ public class MealTo {
                 '}';
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
 }
