@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.model;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,10 +13,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        @NamedQuery(name = Meal.GET, query = "FROM Meal m WHERE m.id = :id AND m.user = :user"),
-        @NamedQuery(name = Meal.ALL_SORTED, query = "FROM Meal WHERE user = :user ORDER BY dateTime DESC"),
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id = :id AND user = :user"),
-        @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "FROM Meal WHERE user = :user  AND dateTime >= :startDateTime AND dateTime < :endDateTime ORDER BY dateTime DESC")
+        @NamedQuery(name = Meal.GET, query = "FROM Meal m WHERE m.id = :id AND m.user.id = :user_id"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "FROM Meal m WHERE m.user.id = :user_id ORDER BY dateTime DESC"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id = :id AND m.user.id = :user_id"),
+        @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "FROM Meal m WHERE m.user.id = :user_id  AND dateTime >= :startDateTime AND dateTime < :endDateTime ORDER BY dateTime DESC")
 })
 @Entity
 @Table(name = "meal", uniqueConstraints = {
@@ -24,18 +26,21 @@ public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.sorted";
     public static final String DELETE = "Meal.delete";
     public static final String BETWEEN_HALF_OPEN = "Meal.betweenHalfOpen";
-    @Column(name = "date_time")
-    @NotNull
+
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
-    @Column(name = "description")
+
+    @Column(name = "description", nullable = false)
     @NotBlank
     @Size(min = 2, max = 120)
     private String description;
+
     @Column(name = "calories")
-    @Size(min = 5, max = 5000)
+    @Range(min = 5, max = 5000)
     private int calories;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {

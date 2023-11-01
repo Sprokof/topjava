@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional
@@ -22,8 +21,9 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        meal.setUser(em.find(User.class, userId));
+        User ref = em.getReference(User.class, userId);
         if(meal.isNew()){
+            meal.setUser(ref);
             em.persist(meal);
             return meal;
         }
@@ -32,18 +32,17 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return get(id, userId) != null && em.createNamedQuery(Meal.DELETE)
+        return em.createNamedQuery(Meal.DELETE)
                 .setParameter("id", id)
-                .setParameter("user", get(id, userId).getUser())
+                .setParameter("user_id", userId)
                 .executeUpdate() != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        User user = em.find(User.class, userId);
         List<Meal> meals = em.createNamedQuery(Meal.GET, Meal.class)
                 .setParameter("id", id)
-                .setParameter("user", user)
+                .setParameter("user_id", userId)
                 .getResultList();
         return DataAccessUtils.singleResult(meals);
 
@@ -52,14 +51,14 @@ public class JpaMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         return em.createNamedQuery(Meal.ALL_SORTED, Meal.class)
-                .setParameter("user", em.find(User.class, userId))
+                .setParameter("user_id", userId)
                 .getResultList();
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN, Meal.class)
-                .setParameter("user", em.find(User.class, userId))
+                .setParameter("user_id", userId)
                 .setParameter("startDateTime", startDateTime)
                 .setParameter("endDateTime", endDateTime)
                 .getResultList();
