@@ -13,8 +13,8 @@
 
 <!--    <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>-->
 
-    <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
-    <jpa:repositories base-package="ru.javawebinar.**.repository.jdbc"/>
+    <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
+    <jpa:repositories base-package="ru.javawebinar.**.repository.datajpa"/>
 
     <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
         <jdbc:script location="${jdbc.initLocation}"/>
@@ -92,9 +92,39 @@
     </beans>
 
     <beans profile="jdbc">
+        <bean id="jdbcUserRepository"
+            class="ru.javawebinar.topjava.repository.jdbc.JdbcUserRepository">
+            <constructor-arg index="0" ref="jdbcTemplate"/>
+            <constructor-arg index="1" ref="namedParameterJdbcTemplate"/>
+        </bean>
+        <bean id="jdbcMealRepository"
+              class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepository">
+            <constructor-arg index="0" ref="jdbcTemplate"/>
+            <constructor-arg index="1" ref="namedParameterJdbcTemplate"/>
+        </bean>
+        <bean id="jdbcTemplate"
+        class="org.springframework.jdbc.core.JdbcTemplate">
+            <constructor-arg ref="dataSource"/>
+        </bean>
+        <bean id="namedParameterJdbcTemplate"
+            class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+            <constructor-arg ref="dataSource"/>
+        </bean>
     </beans>
     <beans profile="jpa">
+        <bean id="jpaUserRepository"
+           class="ru.javawebinar.topjava.repository.jpa.JpaUserRepository">
+        </bean>
+        <bean id="jpaMealRepository"
+              class="ru.javawebinar.topjava.repository.jpa.JpaMealRepository">
+        </bean>
     </beans>
     <beans profile="datajpa">
+        <bean id="dataJpaUserRepository"
+              class="ru.javawebinar.topjava.repository.datajpa.DataJpaUserRepository">
+        </bean>
+        <bean id="dataJpaMealRepository"
+              class="ru.javawebinar.topjava.repository.datajpa.DataJpaMealRepository">
+        </bean>
     </beans>
 </beans>
