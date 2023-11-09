@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class DataJpaMealRepository implements MealRepository {
+public class  DataJpaMealRepository implements MealRepository {
     private final CrudMealRepository crudMealRepository;
     private final CrudUserRepository crudUserRepository;
 
