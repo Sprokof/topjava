@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.BeforeClass;
-import org.springframework.context.EnvironmentAware;
+
 import org.springframework.core.env.Environment;
 import org.junit.ClassRule;
 import org.junit.Rule;
