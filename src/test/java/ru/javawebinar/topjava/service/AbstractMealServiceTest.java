@@ -1,8 +1,11 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -11,7 +14,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import static java.time.LocalDateTime.of;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -79,7 +82,7 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     @Test
     public void updateNotOwn() {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));
-        Assert.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());
+        Assertions.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());
         MEAL_MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), meal1);
     }
 
