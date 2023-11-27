@@ -1,0 +1,8 @@
+POST http://localhost:8080/topjava/rest/user/meals
+Content-Type: application/json
+
+{
+"dateTime":"2023-11-27T16:50:10",
+"description":"dinner",
+"calories":2010
+}

@@ -1,0 +1,16 @@
+PUT http://localhost:8080/topjava/rest/admin/users/100000
+Content-Type: application/json
+
+{
+  "id": 100000,
+  "name": "User",
+  "email": "user@yandex.ru",
+  "password": "password",
+  "enabled": true,
+  "registered": "2023-11-27T12:29:26.911+00:00",
+  "roles": [
+    "USER"
+  ],
+  "caloriesPerDay": 2000,
+  "meals": null
+}

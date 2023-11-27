@@ -1,0 +1,10 @@
+PUT http://localhost:8080/topjava/rest/user/meals/100003
+Content-Type: application/json
+
+{
+  "id": 100003,
+  "dateTime":"2023-11-27T17:01:10",
+  "description":"dinner",
+  "calories":2010
+}
+

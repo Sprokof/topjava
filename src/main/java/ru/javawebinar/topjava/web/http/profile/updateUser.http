@@ -1,0 +1,15 @@
+PUT http://localhost:8080/topjava/rest/profile
+Content-Type: application/json
+
+{
+  "name": "User",
+  "email": "user@yandex.ru",
+  "password": "password",
+  "enabled": true,
+  "registered": "2023-11-27T13:52:04.277+00:00",
+  "roles": [
+    "USER"
+  ],
+  "caloriesPerDay": 2000,
+  "meals": null
+}

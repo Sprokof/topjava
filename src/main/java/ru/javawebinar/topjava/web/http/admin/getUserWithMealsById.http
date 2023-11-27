@@ -1,0 +1,2 @@
+GET http://localhost:8080/topjava/rest/admin/users/100000/with-meals
+Content-Type: application/json
