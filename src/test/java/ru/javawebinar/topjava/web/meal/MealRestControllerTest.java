@@ -21,7 +21,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 public class MealRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = "/" + MealRestController.REST_URL + '/';
-    private static final String REST_FILTER_URL =  REST_URL + MealRestController.FILTER_URL + "?startDate=2020-01-30&endDate=2020-01-30&startTime10:00:00&endTime=20:00:00";
+    private static final String REST_FILTER_URL =  REST_URL + MealRestController.FILTER_URL + "?startDate=2020-01-30&endDate=2020-01-30&startTime=10:00:00&endTime=20:00:00";
 
     @Autowired
     private MealService mealService;
