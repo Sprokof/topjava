@@ -6,20 +6,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DateConverter implements Converter<String, LocalDate> {
-    private String datePattern = "yyyy-MM-dd";
-
-    public String getDatePattern() {
-        return datePattern;
-    }
-
-    public void setDatePattern(String datePattern) {
-        this.datePattern = datePattern;
-    }
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public LocalDate convert(String source) {
-        if(source.isEmpty()) return null;
-        return LocalDate.parse(source, DateTimeFormatter.ofPattern(datePattern));
+        if(source == null || source.isEmpty()) return null;
+        return LocalDate.parse(source, formatter);
     }
 
 }

@@ -7,19 +7,12 @@ import java.time.format.DateTimeFormatter;
 
 
 public class TimeConverter implements Converter<String, LocalTime> {
-    private static String timePattern = "HH:mm:ss";
 
-    public static String getTimePattern() {
-        return timePattern;
-    }
-
-    public static void setTimePattern(String timePattern) {
-        TimeConverter.timePattern = timePattern;
-    }
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @Override
     public LocalTime convert(String source) {
-        if(source.isEmpty()) return null;
-        return LocalTime.parse(source, DateTimeFormatter.ofPattern(timePattern));
+        if(source == null || source.isEmpty()) return null;
+        return LocalTime.parse(source, formatter);
     }
 }

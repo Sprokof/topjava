@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 
 import ru.javawebinar.topjava.service.MealService;
@@ -79,12 +80,22 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_FILTER_URL))
+    void getBetweenWithParams() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + FILTER_URL_WITH_PARAMS))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_MATCHER.contentJson(meal2, meal1));
+
+    }
+
+    @Test
+    void getBetweenWithoutParams() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + FILTER_URL_WITHOUT_PARAMS))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MEAL_MATCHER.contentJson(meal7, meal6, meal5, meal4, meal3, meal2, meal1));
 
     }
 }

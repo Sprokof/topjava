@@ -13,8 +13,9 @@ public class JsonUtil {
     public static <T> List<T> readValues(String json, Class<T> clazz) {
         ObjectReader reader = getMapper().readerFor(clazz);
         try {
-            return reader.<T>readValues(json).readAll();
+            return reader.<T> readValues(json).readAll();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Invalid read array from JSON:\n'" + json + "'", e);
         }
     }
