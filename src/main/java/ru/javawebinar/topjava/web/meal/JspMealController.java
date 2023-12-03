@@ -1,11 +1,12 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -34,8 +35,9 @@ public class JspMealController extends AbstractMealController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
-        model.addAttribute("meal", new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
+    public String create(Model model){
+        model.addAttribute("meal", new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                "", 1000));
         return "mealForm";
     }
 
@@ -44,7 +46,6 @@ public class JspMealController extends AbstractMealController {
         Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
-
         if (request.getParameter("id").isEmpty()) {
             super.create(meal);
         } else {
